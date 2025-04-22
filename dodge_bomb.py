@@ -50,16 +50,29 @@ def gameover(screen: pg.Surface) -> None:
 
     time.sleep(5)
 
+def create_bomb_data() -> list[tuple[int, pg.Surface]]:
+    bomb_data = []
+    for r in range(1, 11):
+        acc = r  # 加速度
+        size = 20 * r  # 爆弾のサイズ
+        bb_img = pg.Surface((size, size), pg.SRCALPHA)
+        pg.draw.circle(bb_img, (255, 0, 0), (size // 2, size // 2), 10 * r)
+        bomb_data.append((acc, bb_img))
+    return bomb_data
 
-    
-    
+
 
 
 
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
     screen = pg.display.set_mode((WIDTH, HEIGHT))
-    bg_img = pg.image.load("fig/pg_bg.jpg")    
+    bg_img = pg.image.load("fig/pg_bg.jpg") 
+
+    bomb_data = create_bomb_data()
+    bb_accs = [acc for acc, img in bomb_data]
+    bb_imgs = [img for acc, img in bomb_data]
+   
     bb_img = pg.Surface((20,20))
     pg.draw.circle(bb_img, (255,0,0),(10,10), 10)
     bb_img.set_colorkey((0,0,0))
@@ -69,8 +82,8 @@ def main():
     kk_img = pg.transform.rotozoom(pg.image.load("fig/3.png"), 0, 0.9)
     kk_rct = kk_img.get_rect()
     kk_rct.center = 300, 200
-    clock = pg.time.Clock()
     tmr = 0
+    clock = pg.time.Clock()
     while True:
         for event in pg.event.get():
             if event.type == pg.QUIT: 
@@ -84,9 +97,9 @@ def main():
             print("Game Over")
             return
 
-        # if kk_rct.colliderect(bb_rct):
-        #     print("Game Over")
-        #     return
+        if kk_rct.colliderect(bb_rct):
+            print("Game Over")
+            return
             
         
         
@@ -97,6 +110,7 @@ def main():
             if key_lst[key]:
                 sum_mv[0] += mv[0] #左右方向
                 sum_mv[1] += mv[1] #上下方向
+            
 
         # if key_lst[pg.K_UP]:
         #     sum_mv[1] -= 5
@@ -110,7 +124,14 @@ def main():
         if check_bound(kk_rct) != (True,True):
             kk_rct.move_ip(-sum_mv[0],-sum_mv[1])
         bb_rct.move_ip(vx,vy)
-        
+
+        idx = min(tmr // 50, 9)
+        avx = vx * bb_accs[idx]
+        avy = vy * bb_accs[idx]
+        bb_img = bb_imgs[idx]
+
+        bb_rct.move_ip(avx, avy)
+
         yoko, tate = check_bound(bb_rct)
         if not yoko:
             vx *= -1
