@@ -29,6 +29,12 @@ def check_bound(rct: pg.Rect) -> tuple[bool,bool]:
     return yoko,tate
 
 def gameover(screen: pg.Surface) -> None:
+    """
+    引数：screen
+    戻り値：None
+    ゲームオーバー時に画面を暗転させ、画像と文字を表示する。
+    """
+    
     blackout = pg.Surface((WIDTH, HEIGHT))  
     blackout.fill((0,0,0))  # 塗りつぶし
     blackout.set_alpha(150) # 透明度
@@ -51,6 +57,11 @@ def gameover(screen: pg.Surface) -> None:
     time.sleep(5)
 
 def create_bomb_data() -> list[tuple[int, pg.Surface]]:
+    """
+    引数：なし
+    戻り値：タプルを含めたリスト
+    爆弾の加速倍率と拡大画像をまとめたリストを作成する。
+    """
     bomb_data = []
     for r in range(1, 11):
         acc = r  # 加速度
