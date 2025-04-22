@@ -98,9 +98,6 @@ def main():
             print("Game Over")
             return
 
-        if kk_rct.colliderect(bb_rct):
-            print("Game Over")
-            return
             
         
         
@@ -127,7 +124,7 @@ def main():
         bb_rct.move_ip(vx,vy)
 
         #時間に応じた爆弾設定
-        idx = min(tmr // 50, 9)
+        idx = min(tmr // 75, 9)
         avx = vx * bb_accs[idx]
         avy = vy * bb_accs[idx]
         bb_img = bb_imgs[idx]
