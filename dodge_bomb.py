@@ -69,6 +69,7 @@ def main():
     screen = pg.display.set_mode((WIDTH, HEIGHT))
     bg_img = pg.image.load("fig/pg_bg.jpg") 
 
+    #爆弾データを作る
     bomb_data = create_bomb_data()
     bb_accs = [acc for acc, img in bomb_data]
     bb_imgs = [img for acc, img in bomb_data]
@@ -125,6 +126,7 @@ def main():
             kk_rct.move_ip(-sum_mv[0],-sum_mv[1])
         bb_rct.move_ip(vx,vy)
 
+        #時間に応じた爆弾設定
         idx = min(tmr // 50, 9)
         avx = vx * bb_accs[idx]
         avy = vy * bb_accs[idx]
